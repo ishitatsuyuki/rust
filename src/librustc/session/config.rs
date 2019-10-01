@@ -1472,6 +1472,8 @@ options! {DebuggingOptions, DebuggingSetter, basic_debugging_options,
         "which mangling version to use for symbol names"),
     binary_dep_depinfo: bool = (false, parse_bool, [TRACKED],
         "include artifacts (sysroot, crate dependencies) used during compilation in dep-info"),
+    profile_sample_use: Option<PathBuf> = (None, parse_opt_pathbuf, [TRACKED],
+        "use sample-based profile data for profile-guided optimization"),
 }
 
 pub fn default_lib_output() -> CrateType {
@@ -2208,10 +2210,13 @@ pub fn build_session_options_and_crate_config(
         );
     }
 
-    if cg.profile_generate.enabled() && cg.profile_use.is_some() {
+    if [cg.profile_generate.enabled(), cg.profile_use.is_some(), debugging_opts.profile_sample_use.is_some()]
+        .iter()
+        .filter(|&&x| x)
+        .count() > 1 {
         early_error(
             error_format,
-            "options `-C profile-generate` and `-C profile-use` are exclusive",
+            "you may only specify one of `-C profile-generate`, `-C profile-use` or `-Z profile-sample-use`",
         );
     }
 

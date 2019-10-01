@@ -1708,7 +1708,8 @@ extern "C" {
                                                LoopVectorize: bool,
                                                PrepareForThinLTO: bool,
                                                PGOGenPath: *const c_char,
-                                               PGOUsePath: *const c_char);
+                                               PGOUsePath: *const c_char,
+                                               PGOSampleUsePath: *const c_char);
     pub fn LLVMRustAddLibraryInfo(PM: &PassManager<'a>,
                                   M: &'a Module,
                                   DisableSimplifyLibCalls: bool);

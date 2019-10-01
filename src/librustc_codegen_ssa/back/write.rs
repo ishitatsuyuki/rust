@@ -58,6 +58,7 @@ pub struct ModuleConfig {
 
     pub pgo_gen: SwitchWithOptPath,
     pub pgo_use: Option<PathBuf>,
+    pub pgo_sample_use: Option<PathBuf>,
 
     // Flags indicating which outputs to produce.
     pub emit_pre_lto_bc: bool,
@@ -96,6 +97,7 @@ impl ModuleConfig {
 
             pgo_gen: SwitchWithOptPath::Disabled,
             pgo_use: None,
+            pgo_sample_use: None,
 
             emit_no_opt_bc: false,
             emit_pre_lto_bc: false,
@@ -425,6 +427,7 @@ pub fn start_async_codegen<B: ExtraBackendMethods>(
 
     modules_config.pgo_gen = sess.opts.cg.profile_generate.clone();
     modules_config.pgo_use = sess.opts.cg.profile_use.clone();
+    modules_config.pgo_sample_use = sess.opts.debugging_opts.profile_sample_use.clone();
 
     modules_config.opt_level = Some(sess.opts.optimize);
     modules_config.opt_size = Some(sess.opts.optimize);

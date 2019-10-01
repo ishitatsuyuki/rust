@@ -735,6 +735,10 @@ pub unsafe fn with_llvm_pmb(llmod: &llvm::Module,
         CString::new(path_buf.to_string_lossy().as_bytes()).unwrap()
     });
 
+    let pgo_sample_use_path = config.pgo_sample_use.as_ref().map(|path_buf| {
+        CString::new(path_buf.to_string_lossy().as_bytes()).unwrap()
+    });
+
     llvm::LLVMRustConfigurePassManagerBuilder(
         builder,
         opt_level,
@@ -744,6 +748,7 @@ pub unsafe fn with_llvm_pmb(llmod: &llvm::Module,
         prepare_for_thin_lto,
         pgo_gen_path.as_ref().map_or(ptr::null(), |s| s.as_ptr()),
         pgo_use_path.as_ref().map_or(ptr::null(), |s| s.as_ptr()),
+        pgo_sample_use_path.as_ref().map_or(ptr::null(), |s| s.as_ptr()),
     );
 
     llvm::LLVMPassManagerBuilderSetSizeLevel(builder, opt_size as u32);

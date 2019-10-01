@@ -1311,6 +1311,12 @@ fn validate_commandline_args_with_session_available(sess: &Session) {
                               path.display()));
         }
     }
+    if let Some(ref path) = sess.opts.debugging_opts.profile_sample_use {
+        if !path.exists() {
+            sess.err(&format!("File `{}` passed to `-Z profile-sample-use` does not exist.",
+                              path.display()));
+        }
+    }
 
     // PGO does not work reliably with panic=unwind on Windows. Let's make it
     // an error to combine the two for now. It always runs into an assertions
